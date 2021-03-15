@@ -1,0 +1,5 @@
+.kdev4
+.vscode
+GLFWTest.kdev4
+*.exec
+*.o
