@@ -37,6 +37,26 @@ int main()
         return -1;
     }
 
+    //----Creating a Triangle----//
+    // This must be done after window is created and before any other OpenGL call
+    GLuint VertexArrayID;
+
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
+
+    // Coordinates
+    static const GLfloat g_vertex_buffer_data[] = {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+    };
+
+    // Indentify vertex buffer
+    GLuint vertexbuffer;
+    glGenBuffers(1, &vertexbuffer); // Generate 1 buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);  // Give verticies to OpenGL
+
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     do
@@ -44,6 +64,12 @@ int main()
         glClear( GL_COLOR_BUFFER_BIT ); // Clear screen
 
         // Draw
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);   // Starting from vertex 0; 3 vertices total -> 1 triangle
+        glDisableVertexAttribArray(0);
 
         // Swap Buffers
         glfwSwapBuffers(window);
